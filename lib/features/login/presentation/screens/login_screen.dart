@@ -124,8 +124,9 @@ class _LoginViewState extends State<_LoginView> {
                             onPressed: isSubmitting ? null : () => _continueAsGuest(context),
                           ),
                           const SizedBox(height: IpsSpacing.xxl),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               TextButton(
                                 onPressed: isSubmitting
