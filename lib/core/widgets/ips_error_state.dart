@@ -23,7 +23,11 @@ class IpsErrorState extends StatelessWidget {
     final content = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.wifi_off_rounded, size: 40, color: IpsColors.textSecondary),
+        const Icon(
+          Icons.wifi_off_rounded,
+          size: 40,
+          color: IpsColors.textSecondary,
+        ),
         const SizedBox(height: IpsSpacing.md),
         Text(
           message,
@@ -32,7 +36,10 @@ class IpsErrorState extends StatelessWidget {
         ),
         if (onRetry != null) ...[
           const SizedBox(height: IpsSpacing.lg),
-          OutlinedButton(onPressed: onRetry, child: const Text('إعادة المحاولة')),
+          OutlinedButton(
+            onPressed: onRetry,
+            child: const Text('إعادة المحاولة'),
+          ),
         ],
       ],
     );

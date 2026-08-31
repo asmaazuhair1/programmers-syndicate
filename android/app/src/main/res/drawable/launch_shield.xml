@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simplified native-launch stand-in for IpsShieldEmblem (the Dart
+     CustomPainter shield used everywhere in-app): a navy shield with a gold
+     outline and three ascending "skyline" bars. Shown for the brief window
+     between the OS launching the app and the Flutter engine's first frame,
+     so that gap reads as branded instead of a blank white screen. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="108dp"
+    android:viewportWidth="96"
+    android:viewportHeight="108">
+  <path
+      android:fillColor="#0E2A45"
+      android:strokeColor="#C9971F"
+      android:strokeWidth="3"
+      android:pathData="M48,2 L92,14 L92,54 C92,80 74,98 48,106 C22,98 4,80 4,54 L4,14 Z" />
+  <path
+      android:fillColor="#C9971F"
+      android:pathData="M28,68 L28,80 L36,80 L36,58 L28,58 Z M42,68 L42,80 L50,80 L50,46 L42,46 Z M56,68 L56,80 L64,80 L64,34 L56,34 Z" />
+</vector>

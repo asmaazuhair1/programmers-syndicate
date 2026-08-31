@@ -26,7 +26,8 @@ class OtpState {
     return OtpState(
       status: status ?? this.status,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
-      resendSecondsRemaining: resendSecondsRemaining ?? this.resendSecondsRemaining,
+      resendSecondsRemaining:
+          resendSecondsRemaining ?? this.resendSecondsRemaining,
     );
   }
 }

@@ -46,3 +46,7 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Local tooling (Claude Code / Playwright MCP session artifacts)
+.claude/settings.local.json
+.playwright-mcp/

@@ -30,7 +30,9 @@ class IpsPrimaryButton extends StatelessWidget {
               width: 22,
               child: CircularProgressIndicator(
                 strokeWidth: 2.4,
-                valueColor: AlwaysStoppedAnimation<Color>(IpsColors.textOnPrimary),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  IpsColors.textOnPrimary,
+                ),
               ),
             )
           : Text(label),

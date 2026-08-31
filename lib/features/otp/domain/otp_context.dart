@@ -6,14 +6,16 @@ enum OtpContext {
   forgotPassword;
 
   String get title => switch (this) {
-        OtpContext.login => 'تأكيد رقم الهاتف',
-        OtpContext.registration => 'تأكيد إنشاء الحساب',
-        OtpContext.forgotPassword => 'تأكيد استعادة كلمة المرور',
-      };
+    OtpContext.login => 'تأكيد رقم الهاتف',
+    OtpContext.registration => 'تأكيد إنشاء الحساب',
+    OtpContext.forgotPassword => 'تأكيد استعادة كلمة المرور',
+  };
 
   String get description => switch (this) {
-        OtpContext.login => 'أدخل رمز التحقق المرسل إلى رقم هاتفك لتسجيل الدخول',
-        OtpContext.registration => 'أدخل رمز التحقق المرسل إلى رقم هاتفك لإكمال إنشاء الحساب',
-        OtpContext.forgotPassword => 'أدخل رمز التحقق المرسل إلى رقم هاتفك لاستعادة كلمة المرور',
-      };
+    OtpContext.login => 'أدخل رمز التحقق المرسل إلى رقم هاتفك لتسجيل الدخول',
+    OtpContext.registration =>
+      'أدخل رمز التحقق المرسل إلى رقم هاتفك لإكمال إنشاء الحساب',
+    OtpContext.forgotPassword =>
+      'أدخل رمز التحقق المرسل إلى رقم هاتفك لاستعادة كلمة المرور',
+  };
 }

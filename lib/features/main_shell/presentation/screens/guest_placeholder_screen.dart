@@ -34,7 +34,7 @@ class GuestPlaceholderScreen extends StatelessWidget {
               ),
               const SizedBox(height: IpsSpacing.xxl),
               TextButton(
-                onPressed: () => context.go(AppRoutes.login),
+                onPressed: () => context.go(AppRoutes.welcome),
                 child: const Text('تسجيل الخروج'),
               ),
             ],

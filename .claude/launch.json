@@ -1,0 +1,35 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ips-app-web-uat",
+      "runtimeExecutable": "/Users/asmaazuhair/dev-sdks/flutter/bin/flutter",
+      "runtimeArgs": [
+        "run",
+        "-d",
+        "web-server",
+        "-t",
+        "lib/main_ips_uat.dart",
+        "--web-port",
+        "5180",
+        "--web-hostname",
+        "127.0.0.1"
+      ],
+      "port": 5180
+    },
+    {
+      "name": "ips-app-web-uat-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "5181",
+        "--directory",
+        "build/web",
+        "--bind",
+        "127.0.0.1"
+      ],
+      "port": 5181
+    }
+  ]
+}

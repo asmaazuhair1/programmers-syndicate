@@ -8,12 +8,24 @@ class IpsAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.leading,
     this.automaticallyImplyLeading = true,
+    this.backgroundColor,
+    this.elevation,
   });
 
   final String title;
   final List<Widget>? actions;
   final Widget? leading;
   final bool automaticallyImplyLeading;
+
+  /// Optional override, left null by default so every existing call site
+  /// keeps the theme's default app-bar surface. Used by screens (e.g.
+  /// Registration) that render their own decorative background behind a
+  /// transparent app bar.
+  final Color? backgroundColor;
+
+  /// Optional elevation override, paired with [backgroundColor] for the
+  /// same transparent-app-bar-over-custom-background use case.
+  final double? elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +34,8 @@ class IpsAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,
+      backgroundColor: backgroundColor,
+      elevation: elevation,
     );
   }
 

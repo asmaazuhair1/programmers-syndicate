@@ -39,8 +39,14 @@ class IpsLogoMark extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('نقابة المبرمجين العراقيين', style: IpsTypography.titleMedium()),
-              Text('Iraqi Programmers Syndicate', style: IpsTypography.labelSmall()),
+              Text(
+                'نقابة المبرمجين العراقيين',
+                style: IpsTypography.titleMedium(),
+              ),
+              Text(
+                'Iraqi Programmers Syndicate',
+                style: IpsTypography.labelSmall(),
+              ),
             ],
           ),
         ],

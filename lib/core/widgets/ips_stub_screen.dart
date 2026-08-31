@@ -22,7 +22,11 @@ class IpsStubScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.construction_outlined, size: 40, color: IpsColors.textSecondary),
+              const Icon(
+                Icons.construction_outlined,
+                size: 40,
+                color: IpsColors.textSecondary,
+              ),
               const SizedBox(height: IpsSpacing.md),
               Text(
                 'قيد التطوير',

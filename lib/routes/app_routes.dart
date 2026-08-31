@@ -1,11 +1,13 @@
 import 'package:go_router/go_router.dart';
 
 import '../features/forgot_password/presentation/screens/forgot_password_stub_screen.dart';
-import '../features/login/presentation/screens/login_screen.dart';
+import '../features/home/presentation/screens/home_screen.dart';
 import '../features/main_shell/presentation/screens/guest_placeholder_screen.dart';
 import '../features/otp/domain/otp_context.dart';
 import '../features/otp/presentation/screens/otp_screen.dart';
-import '../features/registration/presentation/screens/registration_stub_screen.dart';
+import '../features/registration/presentation/screens/registration_screen.dart';
+import '../features/splash/presentation/screens/splash_screen.dart';
+import '../features/welcome/presentation/screens/welcome_screen.dart';
 
 /// Centralized route names. Screens navigate via these constants rather
 /// than hard-coded path strings, and no route is renamed/removed here
@@ -13,11 +15,13 @@ import '../features/registration/presentation/screens/registration_stub_screen.d
 class AppRoutes {
   AppRoutes._();
 
-  static const String login = '/login';
+  static const String splash = '/splash';
+  static const String welcome = '/';
   static const String otp = '/otp';
   static const String registration = '/registration';
   static const String forgotPassword = '/forgot-password';
   static const String guestHome = '/guest';
+  static const String home = '/home';
 }
 
 /// Arguments passed to [AppRoutes.otp] via `extra`, since the OTP screen is
@@ -29,12 +33,25 @@ class OtpRouteArgs {
   final OtpContext context;
 }
 
+/// Optional arguments passed to [AppRoutes.registration] via `extra`, used
+/// when arriving from a verified login OTP so the phone field can be
+/// prefilled and locked instead of re-entered.
+class RegistrationRouteArgs {
+  const RegistrationRouteArgs({this.initialLocalPhoneNumber});
+
+  final String? initialLocalPhoneNumber;
+}
+
 final GoRouter appRouter = GoRouter(
-  initialLocation: AppRoutes.login,
+  initialLocation: AppRoutes.splash,
   routes: [
     GoRoute(
-      path: AppRoutes.login,
-      builder: (context, state) => const LoginScreen(),
+      path: AppRoutes.splash,
+      builder: (context, state) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.welcome,
+      builder: (context, state) => const WelcomeScreen(),
     ),
     GoRoute(
       path: AppRoutes.otp,
@@ -48,7 +65,12 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.registration,
-      builder: (context, state) => const RegistrationStubScreen(),
+      builder: (context, state) {
+        final args = state.extra as RegistrationRouteArgs?;
+        return RegistrationScreen(
+          initialLocalPhoneNumber: args?.initialLocalPhoneNumber,
+        );
+      },
     ),
     GoRoute(
       path: AppRoutes.forgotPassword,
@@ -57,6 +79,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.guestHome,
       builder: (context, state) => const GuestPlaceholderScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.home,
+      builder: (context, state) => const HomeScreen(),
     ),
   ],
 );

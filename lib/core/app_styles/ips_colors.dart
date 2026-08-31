@@ -10,6 +10,24 @@ class IpsColors {
   static const Color primaryContainer = Color(0xFF0E2A45);
   static const Color accent = Color(0xFF1D7A6E);
 
+  /// Cool, desaturated "brushed steel" ramp used by the Registration
+  /// screen's engineered/instrument-panel surfaces — a distinct register
+  /// from the navy [primary]/[primaryContainer] pair (which reads more
+  /// "institutional letterhead" than "machined hardware"), but close
+  /// enough in depth/saturation to sit in the same gradient without
+  /// clashing. [graphite] is the base backdrop tone, [graphiteElevated] is
+  /// for panel/module frames sitting a step above it, and
+  /// [graphiteHighlight] is the lighter edge/hairline tone used for
+  /// borders and sheen highlights on those frames.
+  static const Color graphite = Color(0xFF161B22);
+  static const Color graphiteElevated = Color(0xFF232A33);
+  static const Color graphiteHighlight = Color(0xFF3D4753);
+
+  /// Warm brass/gold used strictly as a small accent (rules, tiny icons,
+  /// decorative lines) on institutional screens (Welcome/Login,
+  /// Registration) — never as a fill or a dominant surface color.
+  static const Color gold = Color(0xFFC9971F);
+
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceMuted = Color(0xFFF5F7F9);
   static const Color outline = Color(0xFFD8DEE4);

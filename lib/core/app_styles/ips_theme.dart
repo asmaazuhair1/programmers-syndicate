@@ -93,7 +93,7 @@ class IpsTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(IpsRadius.field),
-          borderSide: const BorderSide(color: IpsColors.primary, width: 1.5),
+          borderSide: const BorderSide(color: IpsColors.gold, width: 1.6),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(IpsRadius.field),

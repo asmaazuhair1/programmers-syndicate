@@ -2,6 +2,8 @@ import '../../features/login/data/auth_repository.dart';
 import '../../features/login/data/mock_auth_repository.dart';
 import '../../features/otp/data/mock_otp_repository.dart';
 import '../../features/otp/data/otp_repository.dart';
+import '../../features/registration/data/mock_registration_repository.dart';
+import '../../features/registration/data/registration_repository.dart';
 
 /// Minimal manual dependency injection. At this project's size a service
 /// locator package would be unnecessary ceremony — this just centralizes
@@ -14,4 +16,5 @@ class Injector {
 
   late final AuthRepository authRepository = MockAuthRepository();
   late final OtpRepository otpRepository = MockOtpRepository();
+  late final RegistrationRepository registrationRepository = MockRegistrationRepository();
 }

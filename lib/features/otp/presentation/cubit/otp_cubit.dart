@@ -32,14 +32,20 @@ class OtpCubit extends Cubit<OtpState> {
         emit(state.copyWith(resendSecondsRemaining: 0));
         return;
       }
-      emit(state.copyWith(resendSecondsRemaining: state.resendSecondsRemaining - 1));
+      emit(
+        state.copyWith(
+          resendSecondsRemaining: state.resendSecondsRemaining - 1,
+        ),
+      );
     });
   }
 
   Future<void> submitCode(String code) async {
     final validationError = Validators.otpCode(code);
     if (validationError != null) {
-      emit(state.copyWith(status: OtpStatus.error, errorMessage: validationError));
+      emit(
+        state.copyWith(status: OtpStatus.error, errorMessage: validationError),
+      );
       return;
     }
 
@@ -70,7 +76,9 @@ class OtpCubit extends Cubit<OtpState> {
 
     switch (result) {
       case ApiSuccess<void>():
-        emit(state.copyWith(status: OtpStatus.idle, resendSecondsRemaining: 60));
+        emit(
+          state.copyWith(status: OtpStatus.idle, resendSecondsRemaining: 60),
+        );
         _startCountdown();
       case ApiFailure<void>(:final message):
         emit(state.copyWith(status: OtpStatus.error, errorMessage: message));

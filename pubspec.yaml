@@ -37,7 +37,6 @@ dependencies:
 
   flutter_bloc: ^9.1.0
   go_router: ^14.6.2
-  google_fonts: ^6.2.1
   flutter_localizations:
     sdk: flutter
 
@@ -74,22 +73,20 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
 
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+  # Bundled locally (instead of relying on google_fonts' runtime network
+  # fetch from fonts.gstatic.com) so the app's very first frame never
+  # depends on network access being available/fast — see IpsTypography for
+  # why this matters: a blocked/slow font fetch on cold start was leaving
+  # the web preloader in web/index.html stuck forever since Flutter's first
+  # frame couldn't complete without these text styles resolving.
+  fonts:
+    - family: IBMPlexSansArabic
+      fonts:
+        - asset: assets/fonts/IBMPlexSansArabic-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/IBMPlexSansArabic-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/IBMPlexSansArabic-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/IBMPlexSansArabic-Bold.ttf
+          weight: 700

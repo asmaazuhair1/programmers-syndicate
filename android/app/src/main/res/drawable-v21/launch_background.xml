@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
+<!-- Native pre-Flutter launch screen, shown for the brief window between
+     the OS starting the app and the Flutter engine's first frame (before
+     SplashScreen in Dart ever gets a chance to paint). Uses the syndicate's
+     navy/gold brand instead of the Flutter template's default blank white,
+     so cold start never shows an unbranded screen. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?android:colorBackground" />
+    <item android:drawable="#041428" />
 
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+    <item
+        android:width="96dp"
+        android:height="108dp"
+        android:gravity="center"
+        android:drawable="@drawable/launch_shield" />
 </layer-list>

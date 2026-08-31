@@ -26,7 +26,11 @@ class IpsEmptyState extends StatelessWidget {
           children: [
             Icon(icon, size: 40, color: IpsColors.textSecondary),
             const SizedBox(height: IpsSpacing.md),
-            Text(message, textAlign: TextAlign.center, style: IpsTypography.bodyLarge()),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: IpsTypography.bodyLarge(),
+            ),
           ],
         ),
       ),

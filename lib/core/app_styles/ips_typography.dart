@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'ips_colors.dart';
 
 /// IPS typography scale, built on IBM Plex Sans Arabic. All text styles are
 /// defined here so screens never construct ad-hoc [TextStyle]s.
+///
+/// Deliberately bundled as local font assets (see pubspec.yaml `fonts:`)
+/// rather than fetched at runtime via the `google_fonts` package: fetching
+/// over the network on first use meant the very first frame — including the
+/// splash screen — couldn't paint until fonts.gstatic.com responded, which
+/// left the web preloader in web/index.html stuck forever on any
+/// slow/offline/blocked connection. Bundling removes that dependency
+/// entirely so cold start is instant and fully offline-safe.
 class IpsTypography {
   IpsTypography._();
+
+  static const String _fontFamily = 'IBMPlexSansArabic';
 
   static TextStyle _base({
     required double fontSize,
@@ -15,7 +24,8 @@ class IpsTypography {
     double? height,
     double? letterSpacing,
   }) {
-    return GoogleFonts.ibmPlexSansArabic(
+    return TextStyle(
+      fontFamily: _fontFamily,
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -47,16 +57,15 @@ class IpsTypography {
 
   /// Numeric content (phone numbers, OTP digits, dates) that must render
   /// LTR and stay visually stable inside an RTL layout, e.g. the +964
-  /// prefix or notification timestamps.
+  /// prefix or notification timestamps. Reuses the same bundled
+  /// [_fontFamily] (IBM Plex Sans Arabic ships full Latin + digit glyphs)
+  /// rather than a second Google Fonts family, keeping the whole app on one
+  /// locally-bundled font.
   static TextStyle ltrDigits({
     double fontSize = 16,
     FontWeight fontWeight = FontWeight.w500,
     Color color = IpsColors.textPrimary,
   }) {
-    return GoogleFonts.ibmPlexSans(
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: color,
-    );
+    return _base(fontSize: fontSize, fontWeight: fontWeight, color: color);
   }
 }

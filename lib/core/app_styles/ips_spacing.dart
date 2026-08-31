@@ -21,6 +21,7 @@ class IpsRadius {
   static const double none = 0;
   static const double field = 8;
   static const double dialog = 12;
+  static const double card = 18;
 }
 
 /// Width breakpoint used to widen screen padding and constrain content on
