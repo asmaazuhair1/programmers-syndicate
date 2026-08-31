@@ -1,0 +1,82 @@
+name: Deploy Flutter Web to Cloudflare Pages
+
+# Cloudflare Pages' own "Building application" step does NOT have the
+# Flutter SDK, so it cannot run `flutter build web` itself. This workflow
+# builds the Flutter web app here on GitHub Actions (where Flutter is
+# installed explicitly) and then pushes the already-built static output
+# (build/web) to Cloudflare Pages via direct upload. Cloudflare Pages must
+# be configured for "Direct Upload" (no git-connected build command) — see
+# the project README/deployment notes for the one-time dashboard steps.
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+# Prevent overlapping deploys from piling up if multiple pushes land close
+# together; the newest push wins.
+concurrency:
+  group: cloudflare-pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Build Flutter Web and deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Pinned to the exact Flutter version this project is built with
+      # (see .metadata / `flutter --version` locally), so CI always
+      # compiles with the same SDK as local development.
+      - name: Install Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.47.2"
+          channel: "stable"
+          cache: true
+
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      - name: Install dependencies (flutter pub get)
+        run: flutter pub get
+
+      # Non-blocking: surfaces lint/analysis issues in the log without
+      # failing the deployment on warnings. Remove `continue-on-error` if
+      # you want analyzer issues to hard-block deploys.
+      - name: Flutter analyze
+        run: flutter analyze
+        continue-on-error: true
+
+      # This project has no default lib/main.dart — it uses flavor-specific
+      # entry points (main_ips_uat.dart / main_ips_prod.dart). Cloudflare
+      # Pages deploys the production flavor.
+      - name: Build Flutter Web (release)
+        run: flutter build web --release -t lib/main_ips_prod.dart
+
+      # Fails the job with a clear, explicit error message if the build
+      # did not actually produce output, instead of silently deploying an
+      # empty/stale directory.
+      - name: Verify build output exists
+        run: |
+          if [ ! -f "build/web/index.html" ]; then
+            echo "::error::flutter build web did not produce build/web/index.html — aborting deploy."
+            exit 1
+          fi
+          echo "Verified build/web/index.html exists."
+          ls -la build/web
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: programmers-syndicate
+          directory: build/web
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
