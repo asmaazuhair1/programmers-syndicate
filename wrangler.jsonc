@@ -1,0 +1,16 @@
+{
+  // Config for Cloudflare's git-connected build (Settings → Builds).
+  // The build command (set in the Cloudflare dashboard, not here) installs
+  // the Flutter SDK and runs `flutter build web`, producing static output
+  // in build/web. This file just tells `npx wrangler deploy` where that
+  // output directory is, since wrangler cannot auto-detect it.
+  "name": "app-programmers-syndicate",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "build/web",
+    // Flutter web is a single-page app that handles its own client-side
+    // routing (go_router), so unknown paths must fall back to index.html
+    // instead of 404ing.
+    "not_found_handling": "single-page-application"
+  }
+}

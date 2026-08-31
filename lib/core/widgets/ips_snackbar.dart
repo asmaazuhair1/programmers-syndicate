@@ -110,7 +110,7 @@ class _IpsSnackbarContentState extends State<_IpsSnackbarContent>
     return FadeTransition(
       opacity: _fade,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(IpsRadius.card),
         child: Container(
           decoration: const BoxDecoration(color: IpsColors.primary),
           child: IntrinsicHeight(

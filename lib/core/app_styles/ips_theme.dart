@@ -112,7 +112,7 @@ class IpsTheme {
         backgroundColor: IpsColors.textPrimary,
         contentTextStyle: IpsTypography.bodyLarge(color: IpsColors.textOnPrimary),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(IpsRadius.field),
+          borderRadius: BorderRadius.circular(IpsRadius.card),
         ),
       ),
       dialogTheme: DialogThemeData(

@@ -1,16 +1,14 @@
 name: Deploy Flutter Web to Cloudflare Pages
 
-# Cloudflare Pages' own "Building application" step does NOT have the
-# Flutter SDK, so it cannot run `flutter build web` itself. This workflow
-# builds the Flutter web app here on GitHub Actions (where Flutter is
-# installed explicitly) and then pushes the already-built static output
-# (build/web) to Cloudflare Pages via direct upload. Cloudflare Pages must
-# be configured for "Direct Upload" (no git-connected build command) — see
-# the project README/deployment notes for the one-time dashboard steps.
+# DISABLED on push: the Cloudflare project "app-programmers-syndicate" is
+# now configured as a git-connected Workers build (Settings -> Builds,
+# deploy command `npx wrangler deploy`, using the wrangler.jsonc at the
+# repo root) which builds and deploys Flutter web on every push to main
+# by itself. Leaving this workflow's `push` trigger enabled at the same
+# time would deploy twice from two different mechanisms on every push.
+# Kept as workflow_dispatch only in case the git-connected build path is
+# ever abandoned in favor of a GitHub Actions + direct-upload deploy.
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch: {}
 
 # Prevent overlapping deploys from piling up if multiple pushes land close

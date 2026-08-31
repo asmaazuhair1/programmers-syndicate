@@ -99,60 +99,67 @@ class _WelcomeViewState extends State<_WelcomeView> {
                           horizontal: constraints.maxWidth >= 600 ? 24 : 16,
                           vertical: IpsSpacing.xxl,
                         ),
-                        child: Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 480),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const SizedBox(height: IpsSpacing.lg),
-                                IpsSecurityFrame(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      const IpsScreenHeader(
-                                        title: 'نقابة المبرمجين العراقيين',
-                                        description:
-                                            'سجّل الدخول للمتابعة إلى خدمات النقابة الرقمية',
-                                      ),
-                                      const SizedBox(height: IpsSpacing.xxxl),
-                                      IpsPhoneField(
-                                        controller: _phoneController,
-                                        enabled: !isSubmitting,
-                                        errorText: _fieldError,
-                                        helperText:
-                                            'سنرسل رمز تحقق على هذا الرقم',
-                                        onChanged: (_) {
-                                          if (_fieldError != null) {
-                                            setState(() => _fieldError = null);
-                                          }
-                                        },
-                                      ),
-                                      const SizedBox(height: IpsSpacing.xxl),
-                                      IpsPressableScale(
-                                        child: IpsGoldButton(
-                                          label: 'تسجيل الدخول',
-                                          isLoading: isSubmitting,
-                                          onPressed: () => _submit(context),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight:
+                                constraints.maxHeight - IpsSpacing.xxl * 2,
+                          ),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 480),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const SizedBox(height: IpsSpacing.lg),
+                                  IpsSecurityFrame(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        const IpsScreenHeader(
+                                          title: 'نقابة المبرمجين العراقيين',
+                                          description: 'سجّل الدخول للمتابعة إلى خدمات النقابة الرقمية',
                                         ),
-                                      ),
-                                      const SizedBox(height: IpsSpacing.md),
-                                      IpsPressableScale(
-                                        child: IpsOutlinedButton(
-                                          label: 'الدخول كضيف',
-                                          onPressed: isSubmitting
-                                              ? null
-                                              : () => context.go(
-                                                  AppRoutes.guestHome,
-                                                ),
+                                        const SizedBox(height: IpsSpacing.xxxl),
+                                        IpsPhoneField(
+                                          controller: _phoneController,
+                                          enabled: !isSubmitting,
+                                          errorText: _fieldError,
+                                          helperText:
+                                              'سنرسل رمز تحقق على هذا الرقم',
+                                          onChanged: (_) {
+                                            if (_fieldError != null) {
+                                              setState(
+                                                () => _fieldError = null,
+                                              );
+                                            }
+                                          },
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(height: IpsSpacing.xxl),
+                                        IpsPressableScale(
+                                          child: IpsGoldButton(
+                                            label: 'تسجيل الدخول',
+                                            isLoading: isSubmitting,
+                                            onPressed: () => _submit(context),
+                                          ),
+                                        ),
+                                        const SizedBox(height: IpsSpacing.md),
+                                        IpsPressableScale(
+                                          child: IpsOutlinedButton(
+                                            label: 'الدخول كضيف',
+                                            onPressed: isSubmitting
+                                                ? null
+                                                : () => context.go(
+                                                    AppRoutes.guestHome,
+                                                  ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: IpsSpacing.xxxl),
-                              ],
+                                  const SizedBox(height: IpsSpacing.xxxl),
+                                ],
+                              ),
                             ),
                           ),
                         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../app_styles/ips_spacing.dart';
 import 'ips_field_label.dart';
 
 /// Standard IPS dropdown field (governorate, gender, etc.), styled to match
@@ -40,6 +41,7 @@ class IpsDropdownField<T> extends StatelessWidget {
           initialValue: value,
           isExpanded: true,
           onChanged: enabled ? onChanged : null,
+          borderRadius: BorderRadius.circular(IpsRadius.card),
           decoration: InputDecoration(hintText: hintText, errorText: errorText),
           items: [
             for (final item in items)
