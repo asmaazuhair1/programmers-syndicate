@@ -7,12 +7,12 @@ import '../app_styles/ips_typography.dart';
 /// Centralized snackbar presentation so success/error messaging looks
 /// consistent everywhere instead of each screen building its own SnackBar.
 ///
-/// Visually this is a floating, brand-styled toast (rounded card, gold
-/// accent rail, circular icon badge with a small scale-in entrance) rather
-/// than a default Material bar — error uses the deep-navy surface with a
-/// red icon badge, success uses the same navy surface with a gold badge,
-/// so both read as the same institutional identity instead of generic
-/// red/green alerts.
+/// Visually this is a floating, light, professional toast (white card,
+/// soft shadow, thin semantic-colored rail, a softly-tinted circular icon
+/// badge) rather than a dark, default Material bar — error uses a red
+/// rail/badge, success uses a teal rail/badge, so the type of message
+/// reads at a glance while staying calm and light instead of a heavy
+/// solid-color block.
 class IpsSnackbar {
   IpsSnackbar._();
 
@@ -29,7 +29,7 @@ class IpsSnackbar {
     _show(
       context,
       message,
-      badgeColor: IpsColors.gold,
+      badgeColor: IpsColors.success,
       icon: Icons.check_rounded,
     );
   }
@@ -63,10 +63,11 @@ class IpsSnackbar {
   }
 }
 
-/// The toast's visual body: a deep-navy card with a thin gold rail down the
-/// leading edge and a circular icon badge that scales/fades in on entry,
-/// giving the toast its own small motion moment instead of relying only on
-/// the default SnackBar slide-up.
+/// The toast's visual body: a white card with a thin semantic-colored rail
+/// down the leading edge and a softly-tinted circular icon badge that
+/// scales in on entry. Fades in while easing down from a small upward
+/// offset, giving the toast its own settle-in motion instead of relying
+/// only on the default SnackBar slide-up.
 class _IpsSnackbarContent extends StatefulWidget {
   const _IpsSnackbarContent({
     required this.message,
@@ -99,6 +100,16 @@ class _IpsSnackbarContentState extends State<_IpsSnackbarContent>
     curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
   );
 
+  // Small upward-offset settle-in — the card eases down into place instead
+  // of just appearing, giving it a touch more polish than a plain fade.
+  late final Animation<Offset> _slide =
+      Tween<Offset>(begin: const Offset(0, -0.12), end: Offset.zero).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
+        ),
+      );
+
   @override
   void dispose() {
     _controller.dispose();
@@ -107,56 +118,72 @@ class _IpsSnackbarContentState extends State<_IpsSnackbarContent>
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _fade,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(IpsRadius.card),
+    return SlideTransition(
+      position: _slide,
+      child: FadeTransition(
+        opacity: _fade,
         child: Container(
-          decoration: const BoxDecoration(color: IpsColors.primary),
-          child: IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(width: 4, color: IpsColors.gold),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: IpsSpacing.md,
-                      vertical: IpsSpacing.md,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ScaleTransition(
-                          scale: _badgeScale,
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: widget.badgeColor,
-                            ),
-                            child: Icon(
-                              widget.icon,
-                              size: 17,
-                              color: IpsColors.textOnPrimary,
+          decoration: BoxDecoration(
+            color: IpsColors.surface,
+            borderRadius: BorderRadius.circular(IpsRadius.card),
+            border: Border.all(color: IpsColors.outline),
+            boxShadow: [
+              BoxShadow(
+                color: IpsColors.primary.withValues(alpha: 0.12),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(IpsRadius.card),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(width: 4, color: widget.badgeColor),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: IpsSpacing.md,
+                        vertical: IpsSpacing.md,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ScaleTransition(
+                            scale: _badgeScale,
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: widget.badgeColor.withValues(
+                                  alpha: 0.12,
+                                ),
+                              ),
+                              child: Icon(
+                                widget.icon,
+                                size: 17,
+                                color: widget.badgeColor,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: IpsSpacing.md),
-                        Expanded(
-                          child: Text(
-                            widget.message,
-                            style: IpsTypography.bodyLarge(
-                              color: IpsColors.textOnPrimary,
-                            ).copyWith(fontWeight: FontWeight.w600),
+                          const SizedBox(width: IpsSpacing.md),
+                          Expanded(
+                            child: Text(
+                              widget.message,
+                              style: IpsTypography.bodyLarge(
+                                color: IpsColors.textPrimary,
+                              ).copyWith(fontWeight: FontWeight.w600),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
