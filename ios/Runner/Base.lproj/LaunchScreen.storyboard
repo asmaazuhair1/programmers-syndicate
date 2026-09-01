@@ -18,11 +18,12 @@
                         <!-- Native pre-Flutter launch screen, shown for the brief window
                              between the OS starting the app and the Flutter engine's
                              first frame (before SplashScreen in Dart ever gets a chance
-                             to paint). A solid navy brand background instead of the
-                             Flutter template's default white + generic Flutter logo, so
-                             cold start never shows an unbranded screen. -->
+                             to paint). Background must match SplashScreen's Scaffold
+                             backgroundColor (IpsColors.surfaceMuted, #F5F7F9) so this
+                             pre-boot frame is seamless with the Dart splash instead of
+                             flashing a mismatched color first. -->
                         <subviews/>
-                        <color key="backgroundColor" red="0.0157" green="0.0784" blue="0.1569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.9608" green="0.9686" blue="0.9765" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints/>
                     </view>
                 </viewController>

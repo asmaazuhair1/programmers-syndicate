@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Native pre-Flutter launch screen, shown for the brief window between
      the OS starting the app and the Flutter engine's first frame (before
-     SplashScreen in Dart ever gets a chance to paint). Uses the syndicate's
-     navy/gold brand instead of the Flutter template's default blank white,
-     so cold start never shows an unbranded screen. -->
+     SplashScreen in Dart ever gets a chance to paint). Background must
+     match SplashScreen's Scaffold backgroundColor (IpsColors.surfaceMuted,
+     #F5F7F9) so this pre-boot frame is seamless with the Dart splash
+     instead of flashing a mismatched color first; the navy/gold shield
+     icon on top still carries the syndicate's brand mark. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="#041428" />
+    <item android:drawable="#F5F7F9" />
 
     <item
         android:width="96dp"
