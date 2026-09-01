@@ -7,8 +7,9 @@ import '../app_styles/ips_colors.dart';
 /// Full-bleed animated backdrop shared by every light, pre-auth screen
 /// (Welcome, OTP, Registration): a light institutional surface (white /
 /// cool-gray wash, not a dark panel) built from a faint drifting technical
-/// grid, a rotating gold security orbit, slow-floating gold particles, and
-/// a pair of architectural corner frames. Everything runs off a single
+/// grid, a small gov-tech signal network (geometric nodes + connection
+/// paths, see [_GovTechNetwork]), slow-floating gold particles, and a pair
+/// of architectural corner frames. Everything runs off a single
 /// [AnimationController] (one ticker, not several) so the motion stays
 /// cheap and perfectly in sync.
 ///
@@ -69,8 +70,7 @@ class _TechnicalBackdropPainter extends CustomPainter {
     _paintBaseWash(canvas, size);
     _TechnicalGrid.paint(canvas, size, t);
     _ArchitecturalCorners.paint(canvas, size);
-    _GoldOrbit.paint(canvas, size, t);
-    _SignalPulseNode.paint(canvas, size, t);
+    _GovTechNetwork.paint(canvas, size, t);
     _FloatingParticles.paint(canvas, size, t);
   }
 
@@ -219,75 +219,93 @@ class _ArchitecturalCorners {
   }
 }
 
-/// Thin rotating gold ring built from broken arc segments, anchored just
-/// off the top-right corner — a slow, precise "security orbit" rather than
-/// a full glowing halo. Tuned down in opacity for the light surface.
-class _GoldOrbit {
-  const _GoldOrbit._();
+/// A premium "gov-tech" signal network replacing the old circular orbit:
+/// a small cluster of geometric nodes (diamonds) near the top-right corner
+/// plus a lone lower-left beacon node, joined by thin connection paths.
+/// Reads as secure digital infrastructure rather than decoration —
+/// no large circles, no neon, no particle swarm. Connection lines breathe
+/// slowly in opacity, nodes pulse gently, and a single small data signal
+/// travels along one connection at a time.
+class _GovTechNetwork {
+  const _GovTechNetwork._();
+
+  static const _nodes = [
+    Offset(0.90, 0.10),
+    Offset(0.74, 0.07),
+    Offset(0.80, 0.22),
+    Offset(0.63, 0.18),
+    Offset(0.95, 0.28),
+    Offset(0.12, 0.86), // lower-left beacon, replaces the old pulse node.
+    Offset(0.24, 0.92),
+  ];
+
+  static const _edges = [
+    [0, 1],
+    [0, 2],
+    [1, 3],
+    [2, 4],
+    [2, 3],
+    [5, 6],
+  ];
 
   static void paint(Canvas canvas, Size size, double t) {
-    final center = Offset(size.width * 0.88, size.height * 0.14);
-    final radius = math.min(size.width, size.height) * 0.26;
-    final rect = Rect.fromCircle(center: center, radius: radius);
+    final points = _nodes
+        .map((f) => Offset(f.dx * size.width, f.dy * size.height))
+        .toList(growable: false);
 
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2
-      ..color = IpsColors.gold.withValues(alpha: 0.34);
-
-    const segments = 5;
-    const gap = 0.18;
-    final sweepPer = (2 * math.pi / segments) - gap;
-    final rotation = t * 2 * math.pi;
-    for (var i = 0; i < segments; i++) {
-      final start = rotation + i * (sweepPer + gap);
-      canvas.drawArc(rect, start, sweepPer, false, paint);
+    // Connection lines with a slow opacity "breathing".
+    for (var i = 0; i < _edges.length; i++) {
+      final edge = _edges[i];
+      final a = points[edge[0]];
+      final b = points[edge[1]];
+      final phase = (t + i * 0.17) % 1.0;
+      final breathe = 0.5 + 0.5 * math.sin(phase * 2 * math.pi);
+      canvas.drawLine(
+        a,
+        b,
+        Paint()
+          ..strokeWidth = 0.8
+          ..color = IpsColors.primary.withValues(alpha: 0.08 + breathe * 0.06),
+      );
     }
 
-    final innerRect = Rect.fromCircle(center: center, radius: radius * 0.70);
-    final innerPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.8
-      ..color = IpsColors.primary.withValues(alpha: 0.18);
-    canvas.drawArc(
-      innerRect,
-      -rotation * 1.4,
-      math.pi * 0.5,
-      false,
-      innerPaint,
-    );
-    canvas.drawArc(
-      innerRect,
-      -rotation * 1.4 + math.pi,
-      math.pi * 0.5,
-      false,
-      innerPaint,
-    );
-  }
-}
+    // Nodes: small rotated-square "diamonds", pulsing in scale and alpha.
+    for (var i = 0; i < points.length; i++) {
+      final phase = (t + i * 0.13) % 1.0;
+      final pulse = 0.5 + 0.5 * math.sin(phase * 2 * math.pi);
+      final isAccent = i == 0 || i == 5;
+      final color = isAccent ? IpsColors.gold : IpsColors.primary;
+      final baseAlpha = isAccent ? 0.5 : 0.22;
+      final nodeSize = 3.0 + pulse * 1.6;
+      final rect = Rect.fromCenter(
+        center: points[i],
+        width: nodeSize,
+        height: nodeSize,
+      );
+      canvas.save();
+      canvas.translate(rect.center.dx, rect.center.dy);
+      canvas.rotate(math.pi / 4);
+      canvas.translate(-rect.center.dx, -rect.center.dy);
+      canvas.drawRect(
+        rect,
+        Paint()..color = color.withValues(alpha: baseAlpha + pulse * 0.18),
+      );
+      canvas.restore();
+    }
 
-/// A small pulsing node in the lower-left — reads as a "signal beacon"
-/// echoing the gold orbit, independent of the shield emblem inside the
-/// frame.
-class _SignalPulseNode {
-  const _SignalPulseNode._();
-
-  static void paint(Canvas canvas, Size size, double t) {
-    final center = Offset(size.width * 0.12, size.height * 0.86);
-    final pulse = 0.5 + 0.5 * math.sin(t * 2 * math.pi);
-
+    // A single small data signal traveling along one edge at a time.
+    final edgeCount = _edges.length;
+    final cycle = (t * edgeCount) % edgeCount;
+    final activeEdge = _edges[cycle.floor().clamp(0, edgeCount - 1)];
+    final localT = cycle - cycle.floor();
+    final from = points[activeEdge[0]];
+    final to = points[activeEdge[1]];
+    final signalPos = Offset.lerp(from, to, localT)!;
+    final fade = math.sin(localT * math.pi);
     canvas.drawCircle(
-      center,
-      18 + pulse * 6,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.0
-        ..color = IpsColors.gold.withValues(alpha: 0.10 + pulse * 0.10),
-    );
-    canvas.drawCircle(
-      center,
-      3.0,
-      Paint()..color = IpsColors.gold.withValues(alpha: 0.55),
+      signalPos,
+      1.8,
+      Paint()..color = IpsColors.gold.withValues(alpha: 0.7 * fade),
     );
   }
 }

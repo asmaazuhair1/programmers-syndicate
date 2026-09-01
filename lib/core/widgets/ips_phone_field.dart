@@ -79,7 +79,7 @@ class _IpsPhoneFieldState extends State<IpsPhoneField> {
             onChanged: widget.onChanged,
             keyboardType: TextInputType.phone,
             textDirection: TextDirection.ltr,
-            textAlign: TextAlign.left,
+            textAlign: TextAlign.right,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(11),
