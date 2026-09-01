@@ -7,11 +7,9 @@ import '../app_styles/ips_colors.dart';
 /// Full-bleed animated backdrop shared by every light, pre-auth screen
 /// (Welcome, OTP, Registration): a light institutional surface (white /
 /// cool-gray wash, not a dark panel) built from a faint drifting technical
-/// grid, a small gov-tech signal network (geometric nodes + connection
-/// paths, see [_GovTechNetwork]), slow-floating gold particles, and a pair
-/// of architectural corner frames. Everything runs off a single
-/// [AnimationController] (one ticker, not several) so the motion stays
-/// cheap and perfectly in sync.
+/// grid, slow-floating gold particles, and a pair of architectural corner
+/// frames. Everything runs off a single [AnimationController] (one ticker,
+/// not several) so the motion stays cheap and perfectly in sync.
 ///
 /// Deliberately restrained in composition — nothing reshuffles or jumps,
 /// only continuous, low-amplitude motion, so it reads as "alive" behind
@@ -70,7 +68,6 @@ class _TechnicalBackdropPainter extends CustomPainter {
     _paintBaseWash(canvas, size);
     _TechnicalGrid.paint(canvas, size, t);
     _ArchitecturalCorners.paint(canvas, size);
-    _GovTechNetwork.paint(canvas, size, t);
     _FloatingParticles.paint(canvas, size, t);
   }
 
@@ -215,97 +212,6 @@ class _ArchitecturalCorners {
       Offset(size.width - inset, size.height - inset),
       Offset(size.width - inset, size.height - inset - armLength),
       paint,
-    );
-  }
-}
-
-/// A premium "gov-tech" signal network replacing the old circular orbit:
-/// a small cluster of geometric nodes (diamonds) near the top-right corner
-/// plus a lone lower-left beacon node, joined by thin connection paths.
-/// Reads as secure digital infrastructure rather than decoration —
-/// no large circles, no neon, no particle swarm. Connection lines breathe
-/// slowly in opacity, nodes pulse gently, and a single small data signal
-/// travels along one connection at a time.
-class _GovTechNetwork {
-  const _GovTechNetwork._();
-
-  static const _nodes = [
-    Offset(0.90, 0.10),
-    Offset(0.74, 0.07),
-    Offset(0.80, 0.22),
-    Offset(0.63, 0.18),
-    Offset(0.95, 0.28),
-    Offset(0.12, 0.86), // lower-left beacon, replaces the old pulse node.
-    Offset(0.24, 0.92),
-  ];
-
-  static const _edges = [
-    [0, 1],
-    [0, 2],
-    [1, 3],
-    [2, 4],
-    [2, 3],
-    [5, 6],
-  ];
-
-  static void paint(Canvas canvas, Size size, double t) {
-    final points = _nodes
-        .map((f) => Offset(f.dx * size.width, f.dy * size.height))
-        .toList(growable: false);
-
-    // Connection lines with a slow opacity "breathing".
-    for (var i = 0; i < _edges.length; i++) {
-      final edge = _edges[i];
-      final a = points[edge[0]];
-      final b = points[edge[1]];
-      final phase = (t + i * 0.17) % 1.0;
-      final breathe = 0.5 + 0.5 * math.sin(phase * 2 * math.pi);
-      canvas.drawLine(
-        a,
-        b,
-        Paint()
-          ..strokeWidth = 0.8
-          ..color = IpsColors.primary.withValues(alpha: 0.08 + breathe * 0.06),
-      );
-    }
-
-    // Nodes: small rotated-square "diamonds", pulsing in scale and alpha.
-    for (var i = 0; i < points.length; i++) {
-      final phase = (t + i * 0.13) % 1.0;
-      final pulse = 0.5 + 0.5 * math.sin(phase * 2 * math.pi);
-      final isAccent = i == 0 || i == 5;
-      final color = isAccent ? IpsColors.gold : IpsColors.primary;
-      final baseAlpha = isAccent ? 0.5 : 0.22;
-      final nodeSize = 3.0 + pulse * 1.6;
-      final rect = Rect.fromCenter(
-        center: points[i],
-        width: nodeSize,
-        height: nodeSize,
-      );
-      canvas.save();
-      canvas.translate(rect.center.dx, rect.center.dy);
-      canvas.rotate(math.pi / 4);
-      canvas.translate(-rect.center.dx, -rect.center.dy);
-      canvas.drawRect(
-        rect,
-        Paint()..color = color.withValues(alpha: baseAlpha + pulse * 0.18),
-      );
-      canvas.restore();
-    }
-
-    // A single small data signal traveling along one edge at a time.
-    final edgeCount = _edges.length;
-    final cycle = (t * edgeCount) % edgeCount;
-    final activeEdge = _edges[cycle.floor().clamp(0, edgeCount - 1)];
-    final localT = cycle - cycle.floor();
-    final from = points[activeEdge[0]];
-    final to = points[activeEdge[1]];
-    final signalPos = Offset.lerp(from, to, localT)!;
-    final fade = math.sin(localT * math.pi);
-    canvas.drawCircle(
-      signalPos,
-      1.8,
-      Paint()..color = IpsColors.gold.withValues(alpha: 0.7 * fade),
     );
   }
 }
