@@ -44,7 +44,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 1000));
 
       expect(find.byType(SplashScreen), findsNothing);
-      expect(find.text('تسجيل الدخول'), findsOneWidget);
+      // "تسجيل الدخول" appears twice on Welcome by design: once as the
+      // section eyebrow label above the phone field, once as the submit
+      // button's own label.
+      expect(find.text('تسجيل الدخول'), findsNWidgets(2));
       expect(tester.takeException(), isNull);
     },
   );

@@ -483,10 +483,10 @@ class _WelcomeLoginPanel extends StatelessWidget {
   }
 }
 
-/// Small "secure access" label rendered as a technical spec marker — a tiny
-/// rotated gold square, a short bold label, and a hairline extending to the
-/// trailing edge — replacing a generic section title with something that
-/// reads as an institutional/government annotation rather than form UI.
+/// Small section label — a short bold "تسجيل الدخول" caption with a
+/// hairline extending to the trailing edge — replacing a generic section
+/// title with something that reads as an institutional/government
+/// annotation rather than form UI.
 class _SecureAccessEyebrow extends StatelessWidget {
   const _SecureAccessEyebrow();
 
@@ -494,13 +494,8 @@ class _SecureAccessEyebrow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Transform.rotate(
-          angle: math.pi / 4,
-          child: Container(width: 6, height: 6, color: IpsColors.gold),
-        ),
-        const SizedBox(width: IpsSpacing.sm),
         Text(
-          'الدخول الآمن',
+          'تسجيل الدخول',
           style: IpsTypography.labelSmall(color: IpsColors.textSecondary)
               .copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.6),
         ),
