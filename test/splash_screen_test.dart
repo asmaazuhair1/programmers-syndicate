@@ -1,7 +1,7 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:ips_app/core/utils/flavor_helper.dart';
-import 'package:ips_app/core/widgets/ips_shield_emblem.dart';
 import 'package:ips_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:ips_app/main_app.dart';
 import 'package:ips_app/routes/app_routes.dart';
@@ -22,7 +22,16 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 1000));
 
-      expect(find.byType(IpsShieldEmblem), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Image &&
+              widget.image is AssetImage &&
+              (widget.image as AssetImage).assetName ==
+                  'assets/images/logo.webp',
+        ),
+        findsOneWidget,
+      );
       expect(find.text('نقابة المبرمجين العراقيين'), findsOneWidget);
       expect(find.text('Iraqi Programmers Syndicate'), findsOneWidget);
 

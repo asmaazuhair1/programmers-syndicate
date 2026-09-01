@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../app_styles/ips_colors.dart';
 import '../app_styles/ips_spacing.dart';
 import '../app_styles/ips_typography.dart';
-import 'ips_shield_emblem.dart';
 
 /// Entrance block shared by every light, pre-auth screen: the shield
 /// emblem, title and description, fading + scaling in together on first
@@ -63,7 +62,13 @@ class _IpsScreenHeaderState extends State<IpsScreenHeader>
       },
       child: Column(
         children: [
-          const Center(child: IpsShieldEmblem(size: 92)),
+          const Center(
+            child: Image(
+              image: AssetImage('assets/images/logo.webp'),
+              width: 92,
+              height: 92,
+            ),
+          ),
           const SizedBox(height: IpsSpacing.xl),
           Text(
             widget.title,

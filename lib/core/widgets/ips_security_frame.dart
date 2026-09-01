@@ -8,9 +8,8 @@ import '../app_styles/ips_spacing.dart';
 
 /// The central visual anchor shared by every light, pre-auth screen: a
 /// frosted-glass "security frame" that headers, fields, and actions all sit
-/// inside. Distinct from a plain card in two ways — a gold corner-bracket
-/// motif (viewfinder/scanner read) and a one-shot completion flash that
-/// sweeps the border when [isComplete] flips true — plus a soft layered
+/// inside. Distinct from a plain card via a one-shot completion flash that
+/// sweeps the border when [isComplete] flips true, plus a soft layered
 /// drop shadow so it visibly lifts off the animated [IpsTechnicalBackdrop]
 /// instead of sitting flush with it.
 ///
@@ -156,8 +155,8 @@ class _IpsSecurityFrameState extends State<IpsSecurityFrame>
 }
 
 /// Paints on top of the frame's content: a faint full-perimeter hairline,
-/// four pulsing corner brackets, and — only while [completionT] is
-/// animating — a full-perimeter gold flash that sweeps in and back out.
+/// and — only while [completionT] is animating — a full-perimeter gold
+/// flash that sweeps in and back out.
 class _FrameBorderPainter extends CustomPainter {
   const _FrameBorderPainter({
     required this.ambientT,
@@ -183,15 +182,6 @@ class _FrameBorderPainter extends CustomPainter {
         ..color = IpsColors.gold.withValues(alpha: 0.22),
     );
 
-    for (final alignment in const [
-      Alignment.topLeft,
-      Alignment.topRight,
-      Alignment.bottomLeft,
-      Alignment.bottomRight,
-    ]) {
-      _drawBracket(canvas, size, alignment, pulse);
-    }
-
     final flash = math.sin(completionT.clamp(0.0, 1.0) * math.pi);
     if (flash > 0.01) {
       canvas.drawRRect(
@@ -202,46 +192,6 @@ class _FrameBorderPainter extends CustomPainter {
           ..color = IpsColors.gold.withValues(alpha: 0.55 * flash),
       );
     }
-  }
-
-  void _drawBracket(
-    Canvas canvas,
-    Size size,
-    Alignment alignment,
-    double pulse,
-  ) {
-    const armLength = 22.0;
-    const inset = 6.0;
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.4
-      ..strokeCap = StrokeCap.round
-      ..color = IpsColors.gold.withValues(alpha: 0.5 + 0.45 * pulse);
-
-    late final Offset corner;
-    late final Offset armH;
-    late final Offset armV;
-
-    if (alignment == Alignment.topLeft) {
-      corner = const Offset(inset, inset);
-      armH = const Offset(inset + armLength, inset);
-      armV = const Offset(inset, inset + armLength);
-    } else if (alignment == Alignment.topRight) {
-      corner = Offset(size.width - inset, inset);
-      armH = Offset(size.width - inset - armLength, inset);
-      armV = Offset(size.width - inset, inset + armLength);
-    } else if (alignment == Alignment.bottomLeft) {
-      corner = Offset(inset, size.height - inset);
-      armH = Offset(inset + armLength, size.height - inset);
-      armV = Offset(inset, size.height - inset - armLength);
-    } else {
-      corner = Offset(size.width - inset, size.height - inset);
-      armH = Offset(size.width - inset - armLength, size.height - inset);
-      armV = Offset(size.width - inset, size.height - inset - armLength);
-    }
-
-    canvas.drawLine(corner, armH, paint);
-    canvas.drawLine(corner, armV, paint);
   }
 
   @override

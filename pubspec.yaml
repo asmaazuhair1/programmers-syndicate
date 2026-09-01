@@ -73,6 +73,12 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
 
+  # The official syndicate seal, used wherever the brand emblem appears
+  # (screen header, splash) in place of the hand-painted IpsShieldEmblem
+  # placeholder.
+  assets:
+    - assets/images/logo.webp
+
   # Bundled locally (instead of relying on google_fonts' runtime network
   # fetch from fonts.gstatic.com) so the app's very first frame never
   # depends on network access being available/fast — see IpsTypography for

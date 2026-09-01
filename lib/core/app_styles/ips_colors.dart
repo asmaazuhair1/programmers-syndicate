@@ -23,10 +23,10 @@ class IpsColors {
   static const Color graphiteElevated = Color(0xFF232A33);
   static const Color graphiteHighlight = Color(0xFF3D4753);
 
-  /// Warm brass/gold used strictly as a small accent (rules, tiny icons,
+  /// Warm orange accent used strictly as a small accent (rules, tiny icons,
   /// decorative lines) on institutional screens (Welcome/Login,
   /// Registration) — never as a fill or a dominant surface color.
-  static const Color gold = Color(0xFFC9971F);
+  static const Color gold = Color(0xFFF67700);
 
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceMuted = Color(0xFFF5F7F9);

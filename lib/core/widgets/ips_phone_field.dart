@@ -94,8 +94,10 @@ class _IpsPhoneFieldState extends State<IpsPhoneField> {
                 // Symmetric so the flag's distance from the field's outer
                 // edge matches the divider's distance from the digits on
                 // the other side — a one-sided inset made the flag look
-                // like it was hugging the border.
-                padding: const EdgeInsets.symmetric(horizontal: IpsSpacing.xs),
+                // like it was hugging the border. IpsSpacing.sm (not .xs)
+                // so the flag has visible breathing room from the field's
+                // rounded corner instead of crowding it.
+                padding: const EdgeInsets.symmetric(horizontal: IpsSpacing.sm),
                 child: Align(
                   alignment: Alignment.center,
                   widthFactor: 1,

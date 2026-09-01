@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/app_styles/ips_colors.dart';
 import '../../../../core/app_styles/ips_spacing.dart';
 import '../../../../core/app_styles/ips_typography.dart';
-import '../../../../core/widgets/ips_shield_emblem.dart';
 import '../../../../routes/app_routes.dart';
 
 /// Cold-start screen, redesigned to share OTP's light institutional
@@ -86,15 +85,13 @@ class _SplashScreenState extends State<SplashScreen>
       parent: _entrance,
       curve: const Interval(0.3, 0.85, curve: Curves.easeOut),
     );
-    final titleSlide = Tween<Offset>(
-      begin: const Offset(0, 0.08),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _entrance,
-        curve: const Interval(0.3, 0.85, curve: Curves.easeOutCubic),
-      ),
-    );
+    final titleSlide =
+        Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _entrance,
+            curve: const Interval(0.3, 0.85, curve: Curves.easeOutCubic),
+          ),
+        );
     final dividerGrow = CurvedAnimation(
       parent: _entrance,
       curve: const Interval(0.5, 0.95, curve: Curves.easeOutCubic),
@@ -145,7 +142,13 @@ class _SplashScreenState extends State<SplashScreen>
                                 scale: emblemScale,
                                 child: FadeTransition(
                                   opacity: emblemOpacity,
-                                  child: IpsShieldEmblem(size: logoSize),
+                                  child: Image(
+                                    image: const AssetImage(
+                                      'assets/images/logo.webp',
+                                    ),
+                                    width: logoSize,
+                                    height: logoSize,
+                                  ),
                                 ),
                               ),
                             ),
@@ -159,12 +162,13 @@ class _SplashScreenState extends State<SplashScreen>
                                     Text(
                                       'نقابة المبرمجين العراقيين',
                                       textAlign: TextAlign.center,
-                                      style: IpsTypography.displaySmall(
-                                        color: IpsColors.textPrimary,
-                                      ).copyWith(
-                                        fontSize: 23,
-                                        letterSpacing: -0.2,
-                                      ),
+                                      style:
+                                          IpsTypography.displaySmall(
+                                            color: IpsColors.textPrimary,
+                                          ).copyWith(
+                                            fontSize: 23,
+                                            letterSpacing: -0.2,
+                                          ),
                                     ),
                                     const SizedBox(height: IpsSpacing.xs),
                                     Text(
@@ -575,9 +579,8 @@ class _LogoMotionPainter extends CustomPainter {
       canvas.drawCircle(
         pos,
         1.8,
-        Paint()..color = IpsColors.gold.withValues(
-          alpha: 0.6 * settleT * twinkle,
-        ),
+        Paint()
+          ..color = IpsColors.gold.withValues(alpha: 0.6 * settleT * twinkle),
       );
       canvas.drawCircle(
         pos,
@@ -614,7 +617,8 @@ class _LogoMotionPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _LogoMotionPainter oldDelegate) =>
-      oldDelegate.convergeRaw != convergeRaw || oldDelegate.ambientT != ambientT;
+      oldDelegate.convergeRaw != convergeRaw ||
+      oldDelegate.ambientT != ambientT;
 }
 
 /// Full-bleed animated backdrop, built to the same visual language as the
