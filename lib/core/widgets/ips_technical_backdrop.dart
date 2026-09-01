@@ -69,7 +69,6 @@ class _TechnicalBackdropPainter extends CustomPainter {
     _paintBaseWash(canvas, size);
     _TechnicalGrid.paint(canvas, size, t);
     _ArchitecturalCorners.paint(canvas, size);
-    _DecorativeCircuit.paint(canvas, size);
     _GoldOrbit.paint(canvas, size, t);
     _SignalPulseNode.paint(canvas, size, t);
     _FloatingParticles.paint(canvas, size, t);
@@ -290,43 +289,6 @@ class _SignalPulseNode {
       3.0,
       Paint()..color = IpsColors.gold.withValues(alpha: 0.55),
     );
-  }
-}
-
-/// Faint angular circuit tracery with node terminators in deep navy —
-/// reads as blueprint annotation at very low opacity against the light
-/// field.
-class _DecorativeCircuit {
-  const _DecorativeCircuit._();
-
-  static void paint(Canvas canvas, Size size) {
-    final linePaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0
-      ..color = IpsColors.primary.withValues(alpha: 0.08);
-    final nodePaint = Paint()..color = IpsColors.gold.withValues(alpha: 0.30);
-
-    void trace(List<Offset> points) {
-      final path = Path()..moveTo(points.first.dx, points.first.dy);
-      for (final p in points.skip(1)) {
-        path.lineTo(p.dx, p.dy);
-      }
-      canvas.drawPath(path, linePaint);
-      canvas.drawCircle(points.last, 2.2, nodePaint);
-    }
-
-    trace([
-      Offset(0, size.height * 0.28),
-      Offset(size.width * 0.13, size.height * 0.28),
-      Offset(size.width * 0.13, size.height * 0.22),
-      Offset(size.width * 0.23, size.height * 0.22),
-    ]);
-    trace([
-      Offset(size.width, size.height * 0.64),
-      Offset(size.width * 0.85, size.height * 0.64),
-      Offset(size.width * 0.85, size.height * 0.72),
-      Offset(size.width * 0.73, size.height * 0.72),
-    ]);
   }
 }
 
