@@ -152,10 +152,20 @@ class _RegistrationViewState extends State<_RegistrationView> {
                   final errors = state.fieldErrors;
                   return LayoutBuilder(
                     builder: (context, constraints) {
+                      final horizontalPadding = constraints.maxWidth >= 600
+                          ? 24.0
+                          : 16.0;
                       return SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: constraints.maxWidth >= 600 ? 24 : 16,
-                          vertical: IpsSpacing.xxl,
+                        // Top padding is intentionally tighter than the
+                        // horizontal/bottom padding: the AppBar title
+                        // ("إنشاء حساب") already sits directly above, so the
+                        // personal-data card should read as close to it
+                        // rather than leaving a large gap under the header.
+                        padding: EdgeInsets.fromLTRB(
+                          horizontalPadding,
+                          IpsSpacing.sm,
+                          horizontalPadding,
+                          IpsSpacing.xxl,
                         ),
                         child: Center(
                           child: ConstrainedBox(
@@ -163,12 +173,10 @@ class _RegistrationViewState extends State<_RegistrationView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                const SizedBox(height: IpsSpacing.lg),
                                 IpsSecurityFrame(
                                   child: _FormFields(
                                     firstNameController: _firstNameController,
-                                    fatherNameController:
-                                        _fatherNameController,
+                                    fatherNameController: _fatherNameController,
                                     grandfatherNameController:
                                         _grandfatherNameController,
                                     isSubmitting: isSubmitting,
@@ -200,8 +208,7 @@ class _RegistrationViewState extends State<_RegistrationView> {
       ),
       bottomNavigationBar: BlocBuilder<RegistrationCubit, RegistrationState>(
         builder: (context, state) {
-          final isSubmitting =
-              state.status == RegistrationStatus.submitting;
+          final isSubmitting = state.status == RegistrationStatus.submitting;
           return _StickyActionBar(
             label: 'التالي',
             isLoading: isSubmitting,
@@ -250,9 +257,8 @@ class _FormFields extends StatelessWidget {
       children: [
         Text(
           'البيانات الشخصية',
-          style: IpsTypography.titleLarge(
-            color: IpsColors.textPrimary,
-          ).copyWith(fontWeight: FontWeight.w700),
+          style: IpsTypography.titleLarge(color: IpsColors.textPrimary)
+              .copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: IpsSpacing.xl),
         IpsTextField(
