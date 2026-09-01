@@ -8,18 +8,21 @@ import '../app_styles/ips_spacing.dart';
 
 /// The central visual anchor shared by every light, pre-auth screen: a
 /// frosted-glass "security frame" that headers, fields, and actions all sit
-/// inside. Distinct from a plain card in three ways — a gold
-/// corner-bracket motif (viewfinder/scanner read), a thin gold "signal"
-/// segment that continuously travels around the border, and a one-shot
-/// completion flash that sweeps the border when [isComplete] flips true —
-/// plus a soft layered drop shadow so it visibly lifts off the animated
-/// [IpsTechnicalBackdrop] instead of sitting flush with it.
+/// inside. Distinct from a plain card in two ways — a gold corner-bracket
+/// motif (viewfinder/scanner read) and a one-shot completion flash that
+/// sweeps the border when [isComplete] flips true — plus a soft layered
+/// drop shadow so it visibly lifts off the animated [IpsTechnicalBackdrop]
+/// instead of sitting flush with it.
 ///
 /// [child] is built exactly once and never rebuilt by the ambient/entrance
 /// animations (kept as an [AnimatedBuilder.child]), so live [TextField]s
 /// inside never lose focus or get rebuilt on every animation tick.
 class IpsSecurityFrame extends StatefulWidget {
-  const IpsSecurityFrame({super.key, required this.child, this.isComplete = false});
+  const IpsSecurityFrame({
+    super.key,
+    required this.child,
+    this.isComplete = false,
+  });
 
   final Widget child;
 
@@ -153,10 +156,8 @@ class _IpsSecurityFrameState extends State<IpsSecurityFrame>
 }
 
 /// Paints on top of the frame's content: a faint full-perimeter hairline,
-/// a brighter gold segment that travels continuously around that
-/// perimeter (the "security scan" motion), four pulsing corner brackets,
-/// and — only while [completionT] is animating — a full-perimeter gold
-/// flash that sweeps in and back out.
+/// four pulsing corner brackets, and — only while [completionT] is
+/// animating — a full-perimeter gold flash that sweeps in and back out.
 class _FrameBorderPainter extends CustomPainter {
   const _FrameBorderPainter({
     required this.ambientT,
@@ -173,7 +174,6 @@ class _FrameBorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rrect = RRect.fromRectAndRadius(Offset.zero & size, _radius);
-    final basePath = Path()..addRRect(rrect);
 
     canvas.drawRRect(
       rrect,
@@ -182,31 +182,6 @@ class _FrameBorderPainter extends CustomPainter {
         ..strokeWidth = 1.1
         ..color = IpsColors.gold.withValues(alpha: 0.22),
     );
-
-    final metrics = basePath.computeMetrics().toList();
-    if (metrics.isNotEmpty) {
-      final metric = metrics.first;
-      final total = metric.length;
-      final segmentLen = total * 0.16;
-      final start = (ambientT * total) % total;
-      final signalPaint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.6
-        ..strokeCap = StrokeCap.round
-        ..color = IpsColors.gold.withValues(alpha: 0.85);
-      if (start + segmentLen <= total) {
-        canvas.drawPath(
-          metric.extractPath(start, start + segmentLen),
-          signalPaint,
-        );
-      } else {
-        canvas.drawPath(metric.extractPath(start, total), signalPaint);
-        canvas.drawPath(
-          metric.extractPath(0, (start + segmentLen) - total),
-          signalPaint,
-        );
-      }
-    }
 
     for (final alignment in const [
       Alignment.topLeft,
