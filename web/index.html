@@ -38,15 +38,18 @@
        the OTP screen's top-left corner panel).
 
        This must match SplashScreen's Scaffold backgroundColor
-       (IpsColors.primary, #041428) exactly — not just "a dark navy" — so
-       the brief gap before Flutter's engine boots and paints its first
-       frame is visually seamless with the splash screen instead of
-       reading as its own separate (mismatched) loading screen. */
+       (IpsColors.surfaceMuted, #F5F7F9) exactly — not just "a light
+       gray" — so the gap before Flutter's engine boots and paints its
+       first frame is visually seamless with the splash screen instead
+       of reading as its own separate (mismatched) loading screen. The
+       splash screen was redesigned from a dark-navy cinematic look to
+       this light institutional one; this pre-boot color must track
+       that Scaffold color, not the other way around. */
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      background: #041428;
+      background: #F5F7F9;
     }
   </style>
 </head>
