@@ -385,7 +385,7 @@ class _WelcomeLoginPanel extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Positioned(
-          top: -10,
+          top: -20,
           right: -10,
           child: AnimatedBuilder(
             animation: bracketCurve,
@@ -396,7 +396,7 @@ class _WelcomeLoginPanel extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: -10,
+          bottom: -20,
           left: -10,
           child: AnimatedBuilder(
             animation: bracketCurve,
