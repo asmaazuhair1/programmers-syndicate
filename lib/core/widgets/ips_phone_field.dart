@@ -95,9 +95,7 @@ class _IpsPhoneFieldState extends State<IpsPhoneField> {
                 // edge matches the divider's distance from the digits on
                 // the other side — a one-sided inset made the flag look
                 // like it was hugging the border.
-                padding: const EdgeInsets.symmetric(
-                  horizontal: IpsSpacing.xs,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: IpsSpacing.xs),
                 child: Align(
                   alignment: Alignment.center,
                   widthFactor: 1,
@@ -112,12 +110,6 @@ class _IpsPhoneFieldState extends State<IpsPhoneField> {
                           fontWeight: FontWeight.w600,
                           color: IpsColors.textSecondary,
                         ),
-                      ),
-                      const SizedBox(width: 2),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: IpsColors.textSecondary,
                       ),
                       const SizedBox(width: IpsSpacing.sm),
                       Container(width: 1, height: 22, color: IpsColors.outline),
