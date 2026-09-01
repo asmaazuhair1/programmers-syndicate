@@ -333,9 +333,9 @@ class _ArcLoaderPainter extends CustomPainter {
 
 /// Cinematic security-tech motion staged around the shield emblem: thin
 /// gold/navy lines converge in from every direction, two "radar ping"
-/// rings expand and fade, four architectural corner brackets snap into
-/// place, six small nodes fly in and settle into a slow orbit, and one
-/// bright signal pulse sweeps once around the settled ring — then the
+/// rings expand and fade, six small nodes fly in and settle into a slow
+/// orbit, and one bright signal pulse sweeps once around the settled
+/// ring — then the
 /// field quietly idles (gentle counter-rotating dashed ring, twinkling
 /// nodes) for as long as the splash stays on screen. Runs on its own pair
 /// of controllers (a one-shot [_converge] for the entrance choreography,
@@ -425,7 +425,6 @@ class _LogoMotionPainter extends CustomPainter {
 
     _paintConvergenceLines(canvas, center, r);
     _paintSecurityRings(canvas, center, r);
-    _paintCornerBrackets(canvas, center, r);
     _paintOrbitNodes(canvas, center, r);
     _paintSignalSweep(canvas, center, r);
   }
@@ -520,37 +519,6 @@ class _LogoMotionPainter extends CustomPainter {
         ..strokeWidth = 1.4
         ..color = IpsColors.gold.withValues(alpha: opacity),
     );
-  }
-
-  /// Four architectural corner brackets snap into place at the diagonals
-  /// around the emblem — the same viewfinder/scanner motif used by
-  /// [IpsSecurityFrame], echoed in miniature here.
-  void _paintCornerBrackets(Canvas canvas, Offset center, double r) {
-    final t = Curves.easeOutBack.transform(_stage(convergeRaw, 0.12, 0.5));
-    if (t <= 0) return;
-    const armLength = 14.0;
-    final radius = r * 0.72;
-    final clampedT = t.clamp(0.0, 1.0);
-    for (final angle in const [
-      -3 * math.pi / 4, // Top-left.
-      -math.pi / 4, // Top-right.
-      math.pi / 4, // Bottom-right.
-      3 * math.pi / 4, // Bottom-left.
-    ]) {
-      final corner = Offset(
-        center.dx + math.cos(angle) * radius,
-        center.dy + math.sin(angle) * radius,
-      );
-      final tangent = Offset(-math.sin(angle), math.cos(angle));
-      final radial = Offset(math.cos(angle), math.sin(angle));
-      final paint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.4
-        ..strokeCap = StrokeCap.round
-        ..color = IpsColors.primary.withValues(alpha: 0.4 * clampedT);
-      canvas.drawLine(corner, corner + tangent * armLength * t, paint);
-      canvas.drawLine(corner, corner - radial * armLength * t, paint);
-    }
   }
 
   /// Six small nodes fly in from scattered angles/radii and settle into
