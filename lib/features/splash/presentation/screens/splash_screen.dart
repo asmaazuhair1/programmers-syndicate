@@ -92,10 +92,6 @@ class _SplashScreenState extends State<SplashScreen>
             curve: const Interval(0.3, 0.85, curve: Curves.easeOutCubic),
           ),
         );
-    final dividerGrow = CurvedAnimation(
-      parent: _entrance,
-      curve: const Interval(0.5, 0.95, curve: Curves.easeOutCubic),
-    );
     final loaderOpacity = CurvedAnimation(
       parent: _entrance,
       curve: const Interval(0.65, 1.0, curve: Curves.easeOut),
@@ -136,19 +132,16 @@ class _SplashScreenState extends State<SplashScreen>
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            _LogoMotionField(
-                              size: logoSize * 2.5,
-                              child: ScaleTransition(
-                                scale: emblemScale,
-                                child: FadeTransition(
-                                  opacity: emblemOpacity,
-                                  child: Image(
-                                    image: const AssetImage(
-                                      'assets/images/logo.webp',
-                                    ),
-                                    width: logoSize,
-                                    height: logoSize,
+                            ScaleTransition(
+                              scale: emblemScale,
+                              child: FadeTransition(
+                                opacity: emblemOpacity,
+                                child: Image(
+                                  image: const AssetImage(
+                                    'assets/images/logo.webp',
                                   ),
+                                  width: logoSize,
+                                  height: logoSize,
                                 ),
                               ),
                             ),
@@ -177,29 +170,6 @@ class _SplashScreenState extends State<SplashScreen>
                                       style: IpsTypography.bodyMedium(
                                         color: IpsColors.gold,
                                       ).copyWith(letterSpacing: 1.4),
-                                    ),
-                                    const SizedBox(height: IpsSpacing.lg),
-                                    AnimatedBuilder(
-                                      animation: dividerGrow,
-                                      builder: (context, child) {
-                                        return ClipRect(
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            widthFactor: dividerGrow.value
-                                                .clamp(0.001, 1.0),
-                                            child: child,
-                                          ),
-                                        );
-                                      },
-                                      child: const _GoldDivider(),
-                                    ),
-                                    const SizedBox(height: IpsSpacing.md),
-                                    Text(
-                                      'نحو مجتمع تقني رائد ومُبدع',
-                                      textAlign: TextAlign.center,
-                                      style: IpsTypography.bodyMedium(
-                                        color: IpsColors.textSecondary,
-                                      ).copyWith(letterSpacing: 0.2),
                                     ),
                                   ],
                                 ),
@@ -234,41 +204,6 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-}
-
-/// Thin gold rule flanking a small solid gold point — the same quiet
-/// "section marker" language used on Welcome, reused here beneath the brand
-/// title. Wrapped by the caller in an [Align]/[ClipRect] pair that animates
-/// [Align.widthFactor] so the whole rule visibly draws itself in from the
-/// center outward instead of simply fading.
-class _GoldDivider extends StatelessWidget {
-  const _GoldDivider();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _rule(),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          width: 4,
-          height: 4,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: IpsColors.gold,
-          ),
-        ),
-        _rule(),
-      ],
-    );
-  }
-
-  Widget _rule() => Container(
-    width: 30,
-    height: 1,
-    color: IpsColors.gold.withValues(alpha: 0.6),
-  );
 }
 
 /// A single slim gold arc that continuously rotates around its track —
@@ -329,296 +264,6 @@ class _ArcLoaderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _ArcLoaderPainter oldDelegate) =>
       oldDelegate.t != t;
-}
-
-/// Cinematic security-tech motion staged around the shield emblem: thin
-/// gold/navy lines converge in from every direction, two "radar ping"
-/// rings expand and fade, four architectural corner brackets snap into
-/// place, six small nodes fly in and settle into a slow orbit, and one
-/// bright signal pulse sweeps once around the settled ring — then the
-/// field quietly idles (gentle counter-rotating dashed ring, twinkling
-/// nodes) for as long as the splash stays on screen. Runs on its own pair
-/// of controllers (a one-shot [_converge] for the entrance choreography,
-/// a repeating [_ambient] for the idle motion after) so this stays a
-/// self-contained decorative layer behind [child] rather than reaching
-/// into the screen's own entrance timeline.
-class _LogoMotionField extends StatefulWidget {
-  const _LogoMotionField({required this.size, required this.child});
-
-  /// Overall square footprint of the motion field — deliberately larger
-  /// than the emblem itself so the lines/rings/nodes have room to move
-  /// around it instead of crowding its edge.
-  final double size;
-  final Widget child;
-
-  @override
-  State<_LogoMotionField> createState() => _LogoMotionFieldState();
-}
-
-class _LogoMotionFieldState extends State<_LogoMotionField>
-    with TickerProviderStateMixin {
-  late final AnimationController _converge = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1500),
-  )..forward();
-  late final AnimationController _ambient = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 10),
-  )..repeat();
-
-  @override
-  void dispose() {
-    _converge.dispose();
-    _ambient.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned.fill(
-            child: IgnorePointer(
-              child: AnimatedBuilder(
-                animation: Listenable.merge([_converge, _ambient]),
-                builder: (context, _) {
-                  return CustomPaint(
-                    painter: _LogoMotionPainter(
-                      convergeRaw: _converge.value,
-                      ambientT: _ambient.value,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          widget.child,
-        ],
-      ),
-    );
-  }
-}
-
-class _LogoMotionPainter extends CustomPainter {
-  const _LogoMotionPainter({required this.convergeRaw, required this.ambientT});
-
-  /// 0..1 linear, one-shot — sliced into sub-[_stage]s below so each
-  /// element of the sequence gets its own start/end window.
-  final double convergeRaw;
-
-  /// 0..1, looping — drives the idle motion once [convergeRaw] reaches 1.
-  final double ambientT;
-
-  static double _stage(double t, double start, double end) =>
-      ((t - start) / (end - start)).clamp(0.0, 1.0);
-
-  static double _lerp(double a, double b, double t) => a + (b - a) * t;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final r = size.width / 2;
-
-    _paintConvergenceLines(canvas, center, r);
-    _paintSecurityRings(canvas, center, r);
-    _paintCornerBrackets(canvas, center, r);
-    _paintOrbitNodes(canvas, center, r);
-    _paintSignalSweep(canvas, center, r);
-  }
-
-  /// Ten thin lines (alternating gold/navy) start at the field's edge and
-  /// travel inward toward the emblem, then fade out once they arrive —
-  /// the "emerging from all directions" opening beat.
-  void _paintConvergenceLines(Canvas canvas, Offset center, double r) {
-    final drawT = Curves.easeOutCubic.transform(_stage(convergeRaw, 0.0, 0.5));
-    final fadeT = _stage(convergeRaw, 0.45, 0.8);
-    final opacity = 1 - fadeT;
-    if (drawT <= 0 || opacity <= 0) return;
-
-    const count = 10;
-    for (var i = 0; i < count; i++) {
-      final angle = (2 * math.pi / count) * i + 0.3;
-      final outer = Offset(
-        center.dx + math.cos(angle) * r * 1.05,
-        center.dy + math.sin(angle) * r * 1.05,
-      );
-      final targetInner = Offset(
-        center.dx + math.cos(angle) * r * 0.46,
-        center.dy + math.sin(angle) * r * 0.46,
-      );
-      final inner = Offset.lerp(outer, targetInner, drawT)!;
-      final isGold = i.isEven;
-      canvas.drawLine(
-        outer,
-        inner,
-        Paint()
-          ..strokeWidth = isGold ? 1.1 : 0.9
-          ..color = (isGold ? IpsColors.gold : IpsColors.primary).withValues(
-            alpha: (isGold ? 0.5 : 0.28) * opacity * drawT,
-          ),
-      );
-    }
-  }
-
-  /// Two staggered "radar ping" rings that expand outward and fade, then
-  /// a quiet permanent ring plus a slow counter-rotating dashed ring once
-  /// the sequence settles, so the field keeps a faint pulse for as long
-  /// as it stays on screen instead of freezing.
-  void _paintSecurityRings(Canvas canvas, Offset center, double r) {
-    _ring(canvas, center, r, start: 0.05, end: 0.55, baseRadius: 0.50);
-    _ring(canvas, center, r, start: 0.18, end: 0.68, baseRadius: 0.62);
-
-    final idleOpacity = _stage(convergeRaw, 0.75, 1.0);
-    if (idleOpacity <= 0) return;
-
-    canvas.drawCircle(
-      center,
-      r * 0.58,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.0
-        ..color = IpsColors.gold.withValues(alpha: 0.22 * idleOpacity),
-    );
-
-    final rect = Rect.fromCircle(center: center, radius: r * 0.70);
-    const segments = 6;
-    const gap = 0.22;
-    final sweepPer = (2 * math.pi / segments) - gap;
-    final rotation = ambientT * 2 * math.pi;
-    final ringPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0
-      ..color = IpsColors.primary.withValues(alpha: 0.16 * idleOpacity);
-    for (var i = 0; i < segments; i++) {
-      final start = rotation + i * (sweepPer + gap);
-      canvas.drawArc(rect, start, sweepPer, false, ringPaint);
-    }
-  }
-
-  void _ring(
-    Canvas canvas,
-    Offset center,
-    double r, {
-    required double start,
-    required double end,
-    required double baseRadius,
-  }) {
-    final t = _stage(convergeRaw, start, end);
-    if (t <= 0 || t >= 1) return;
-    final eased = Curves.easeOut.transform(t);
-    final radius = r * baseRadius * (0.55 + eased * 0.65);
-    final opacity = (1 - eased) * 0.55;
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.4
-        ..color = IpsColors.gold.withValues(alpha: opacity),
-    );
-  }
-
-  /// Four architectural corner brackets snap into place at the diagonals
-  /// around the emblem — the same viewfinder/scanner motif used by
-  /// [IpsSecurityFrame], echoed in miniature here.
-  void _paintCornerBrackets(Canvas canvas, Offset center, double r) {
-    final t = Curves.easeOutBack.transform(_stage(convergeRaw, 0.12, 0.5));
-    if (t <= 0) return;
-    const armLength = 14.0;
-    final radius = r * 0.72;
-    final clampedT = t.clamp(0.0, 1.0);
-    for (final angle in const [
-      -3 * math.pi / 4, // Top-left.
-      -math.pi / 4, // Top-right.
-      math.pi / 4, // Bottom-right.
-      3 * math.pi / 4, // Bottom-left.
-    ]) {
-      final corner = Offset(
-        center.dx + math.cos(angle) * radius,
-        center.dy + math.sin(angle) * radius,
-      );
-      final tangent = Offset(-math.sin(angle), math.cos(angle));
-      final radial = Offset(math.cos(angle), math.sin(angle));
-      final paint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.4
-        ..strokeCap = StrokeCap.round
-        ..color = IpsColors.primary.withValues(alpha: 0.4 * clampedT);
-      canvas.drawLine(corner, corner + tangent * armLength * t, paint);
-      canvas.drawLine(corner, corner - radial * armLength * t, paint);
-    }
-  }
-
-  /// Six small nodes fly in from scattered angles/radii and settle into
-  /// an even ring around the emblem, then keep drifting slowly (via
-  /// [ambientT]) and twinkling — the "glowing particles" that give the
-  /// field a sense of being alive rather than a fixed decoration.
-  void _paintOrbitNodes(Canvas canvas, Offset center, double r) {
-    const nodeCount = 6;
-    for (var i = 0; i < nodeCount; i++) {
-      final settleT = Curves.easeOutCubic.transform(
-        _stage(convergeRaw, 0.30 + i * 0.03, 0.75 + i * 0.03),
-      );
-      if (settleT <= 0) continue;
-
-      final targetAngle =
-          (2 * math.pi / nodeCount) * i + ambientT * 2 * math.pi * 0.5;
-      final startAngle = targetAngle + (i.isEven ? -1.1 : 1.1);
-      final angle = _lerp(startAngle, targetAngle, settleT);
-      final radius = _lerp(r * 1.15, r * 0.80, settleT);
-      final pos = Offset(
-        center.dx + math.cos(angle) * radius,
-        center.dy + math.sin(angle) * radius,
-      );
-
-      final twinkle = 0.6 + 0.4 * math.sin(ambientT * 2 * math.pi + i);
-      canvas.drawCircle(
-        pos,
-        1.8,
-        Paint()
-          ..color = IpsColors.gold.withValues(alpha: 0.6 * settleT * twinkle),
-      );
-      canvas.drawCircle(
-        pos,
-        5 + twinkle * 2,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 0.8
-          ..color = IpsColors.gold.withValues(alpha: 0.18 * settleT * twinkle),
-      );
-    }
-  }
-
-  /// One bright gold arc sweeps a single full lap around the settled ring
-  /// near the end of the entrance — a deliberate "signal lock" beat that
-  /// hands off from the busy convergence into the quiet idle state.
-  void _paintSignalSweep(Canvas canvas, Offset center, double r) {
-    final t = _stage(convergeRaw, 0.55, 0.95);
-    if (t <= 0 || t >= 1) return;
-    final rect = Rect.fromCircle(center: center, radius: r * 0.58);
-    final sweepStart = -math.pi / 2 + t * 2 * math.pi;
-    final fade = math.sin(t * math.pi);
-    canvas.drawArc(
-      rect,
-      sweepStart,
-      math.pi * 0.22,
-      false,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.2
-        ..strokeCap = StrokeCap.round
-        ..color = IpsColors.gold.withValues(alpha: 0.75 * fade),
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _LogoMotionPainter oldDelegate) =>
-      oldDelegate.convergeRaw != convergeRaw ||
-      oldDelegate.ambientT != ambientT;
 }
 
 /// Full-bleed animated backdrop, built to the same visual language as the
