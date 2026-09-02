@@ -9,7 +9,6 @@ import '../../../../core/di/injector.dart';
 import '../../../../core/widgets/ips_date_field.dart';
 import '../../../../core/widgets/ips_dropdown_field.dart';
 import '../../../../core/widgets/ips_gold_button.dart';
-import '../../../../core/widgets/ips_security_frame.dart';
 import '../../../../core/widgets/ips_snackbar.dart';
 import '../../../../core/widgets/ips_technical_backdrop.dart';
 import '../../../../core/widgets/ips_text_field.dart';
@@ -50,10 +49,11 @@ const List<String> _genders = ['ذكر', 'أنثى'];
 /// On success it routes to the Home screen.
 ///
 /// Shares the same light "security scanner" language as Welcome and OTP —
-/// [IpsTechnicalBackdrop] behind an [IpsSecurityFrame] holding the section
-/// header and fields, with a real [AppBar] back arrow + title replacing the
-/// former standalone navy hero band, and a light sticky action bar built on
-/// [IpsGoldButton] replacing the former solid-navy one.
+/// [IpsTechnicalBackdrop] behind the section header and fields (no card
+/// wrapping them; content sits directly on the backdrop), with a real
+/// [AppBar] back arrow + title replacing the former standalone navy hero
+/// band, and a light sticky action bar built on [IpsGoldButton] replacing
+/// the former solid-navy one.
 class RegistrationScreen extends StatelessWidget {
   const RegistrationScreen({super.key, this.initialLocalPhoneNumber});
 
@@ -159,8 +159,8 @@ class _RegistrationViewState extends State<_RegistrationView> {
                         // Top padding is intentionally tighter than the
                         // horizontal/bottom padding: the AppBar title
                         // ("إنشاء حساب") already sits directly above, so the
-                        // personal-data card should read as close to it
-                        // rather than leaving a large gap under the header.
+                        // first field should read as close to it rather than
+                        // leaving a large gap under the header.
                         padding: EdgeInsets.fromLTRB(
                           horizontalPadding,
                           IpsSpacing.sm,
@@ -173,24 +173,22 @@ class _RegistrationViewState extends State<_RegistrationView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                IpsSecurityFrame(
-                                  child: _FormFields(
-                                    firstNameController: _firstNameController,
-                                    fatherNameController: _fatherNameController,
-                                    grandfatherNameController:
-                                        _grandfatherNameController,
-                                    isSubmitting: isSubmitting,
-                                    errors: errors,
-                                    governorate: _governorate,
-                                    gender: _gender,
-                                    birthDate: _birthDate,
-                                    onGovernorateChanged: (value) =>
-                                        setState(() => _governorate = value),
-                                    onGenderChanged: (value) =>
-                                        setState(() => _gender = value),
-                                    onBirthDateChanged: (value) =>
-                                        setState(() => _birthDate = value),
-                                  ),
+                                _FormFields(
+                                  firstNameController: _firstNameController,
+                                  fatherNameController: _fatherNameController,
+                                  grandfatherNameController:
+                                      _grandfatherNameController,
+                                  isSubmitting: isSubmitting,
+                                  errors: errors,
+                                  governorate: _governorate,
+                                  gender: _gender,
+                                  birthDate: _birthDate,
+                                  onGovernorateChanged: (value) =>
+                                      setState(() => _governorate = value),
+                                  onGenderChanged: (value) =>
+                                      setState(() => _gender = value),
+                                  onBirthDateChanged: (value) =>
+                                      setState(() => _birthDate = value),
                                 ),
                                 const SizedBox(height: IpsSpacing.xxxl),
                               ],
@@ -220,9 +218,9 @@ class _RegistrationViewState extends State<_RegistrationView> {
   }
 }
 
-/// Section header + field groups, laid directly inside the shared
-/// [IpsSecurityFrame] (which already provides its own entrance animation),
-/// so this widget itself carries no motion of its own.
+/// Field groups laid directly on the screen's backdrop (no section header,
+/// no enclosing card). Carries no entrance motion of its own — content
+/// simply appears with the rest of the screen.
 class _FormFields extends StatelessWidget {
   const _FormFields({
     required this.firstNameController,
@@ -255,12 +253,6 @@ class _FormFields extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          'البيانات الشخصية',
-          style: IpsTypography.titleLarge(color: IpsColors.textPrimary)
-              .copyWith(fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(height: IpsSpacing.xl),
         IpsTextField(
           label: 'الاسم الأول',
           controller: firstNameController,

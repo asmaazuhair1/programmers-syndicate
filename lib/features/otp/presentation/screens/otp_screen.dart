@@ -8,7 +8,6 @@ import '../../../../core/app_styles/ips_typography.dart';
 import '../../../../core/di/injector.dart';
 import '../../../../core/widgets/ips_gold_button.dart';
 import '../../../../core/widgets/ips_screen_header.dart';
-import '../../../../core/widgets/ips_security_frame.dart';
 import '../../../../core/widgets/ips_snackbar.dart';
 import '../../../../core/widgets/ips_technical_backdrop.dart';
 import '../../../../routes/app_routes.dart';
@@ -122,74 +121,61 @@ class _OtpViewState extends State<_OtpView> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 const SizedBox(height: IpsSpacing.lg),
-                                IpsSecurityFrame(
-                                  isComplete: _code.length == 6,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      IpsScreenHeader(
-                                        title: widget.otpContext.title,
-                                        description:
-                                            widget.otpContext.description,
+                                IpsScreenHeader(
+                                  title: widget.otpContext.title,
+                                  description: widget.otpContext.description,
+                                ),
+                                const SizedBox(height: IpsSpacing.xxxl),
+                                OtpInputGroup(
+                                  spacing: IpsSpacing.xxxl,
+                                  children: [
+                                    Center(
+                                      child: _PhoneNumberLine(
+                                        localPhoneNumber:
+                                            widget.localPhoneNumber,
                                       ),
-                                      const SizedBox(height: IpsSpacing.xxxl),
-                                      OtpInputGroup(
-                                        spacing: IpsSpacing.xxxl,
-                                        children: [
-                                          Center(
-                                            child: _PhoneNumberLine(
-                                              localPhoneNumber:
-                                                  widget.localPhoneNumber,
-                                            ),
-                                          ),
-                                          OtpSegmentedInput(
-                                            length: 6,
-                                            enabled: !isSubmitting,
-                                            hasError: hasError,
-                                            onChanged: (value) {
-                                              setState(() => _code = value);
-                                            },
-                                            onCompleted: (value) =>
-                                                _onCompleted(context, value),
-                                          ),
-                                        ],
-                                      ),
-                                      if (hasError &&
-                                          state.errorMessage != null) ...[
-                                        const SizedBox(height: IpsSpacing.sm),
-                                        Text(
-                                          state.errorMessage!,
-                                          style: IpsTypography.labelSmall(
-                                            color: IpsColors.error,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                      const SizedBox(height: IpsSpacing.xxl),
-                                      IpsGoldButton(
-                                        label: 'تحقق',
-                                        isLoading: isSubmitting,
-                                        onPressed: _code.length == 6
-                                            ? () => _onCompleted(context, _code)
-                                            : null,
-                                      ),
-                                      const SizedBox(height: IpsSpacing.xl),
-                                      Center(
-                                        child: ResendButton(
-                                          canResend: state.canResend,
-                                          isResending:
-                                              state.status ==
-                                              OtpStatus.resending,
-                                          secondsRemaining:
-                                              state.resendSecondsRemaining,
-                                          totalSeconds: 60,
-                                          onResend: () => context
-                                              .read<OtpCubit>()
-                                              .resendCode(),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
+                                    OtpSegmentedInput(
+                                      length: 6,
+                                      enabled: !isSubmitting,
+                                      hasError: hasError,
+                                      onChanged: (value) {
+                                        setState(() => _code = value);
+                                      },
+                                      onCompleted: (value) =>
+                                          _onCompleted(context, value),
+                                    ),
+                                  ],
+                                ),
+                                if (hasError && state.errorMessage != null) ...[
+                                  const SizedBox(height: IpsSpacing.sm),
+                                  Text(
+                                    state.errorMessage!,
+                                    style: IpsTypography.labelSmall(
+                                      color: IpsColors.error,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                                const SizedBox(height: IpsSpacing.xxl),
+                                IpsGoldButton(
+                                  label: 'تحقق',
+                                  isLoading: isSubmitting,
+                                  onPressed: _code.length == 6
+                                      ? () => _onCompleted(context, _code)
+                                      : null,
+                                ),
+                                const SizedBox(height: IpsSpacing.xl),
+                                Center(
+                                  child: ResendButton(
+                                    canResend: state.canResend,
+                                    isResending:
+                                        state.status == OtpStatus.resending,
+                                    secondsRemaining:
+                                        state.resendSecondsRemaining,
+                                    totalSeconds: 60,
+                                    onResend: () =>
+                                        context.read<OtpCubit>().resendCode(),
                                   ),
                                 ),
                                 const SizedBox(height: IpsSpacing.xxxl),
