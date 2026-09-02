@@ -123,6 +123,10 @@ class _RegistrationViewState extends State<_RegistrationView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
+        // Default titleSpacing (16) plus the leading icon's own inset inside
+        // its 56px tap-target box reads as a wide gap between the back arrow
+        // and the title. Tightened so the two sit closer together.
+        titleSpacing: IpsSpacing.sm,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: IpsColors.textPrimary),
           onPressed: () => context.go(AppRoutes.welcome),
